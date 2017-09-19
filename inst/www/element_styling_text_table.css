@@ -1,0 +1,21 @@
+table > tr { 
+        text-align:center;
+}                
+
+/* Centres the input box contents of the div */
+td > div {
+    margin:auto;
+}
+
+/* This class is responsible for the persistent margin space */
+/* the form-group class also affects this element but needs to
+be targeted separately to set table row spacing. auto = 0 margin*/
+form-group {
+        margin:5px;
+}
+
+input { 
+        text-align:center;
+        display:inline-block; 
+        margin:auto;
+}
