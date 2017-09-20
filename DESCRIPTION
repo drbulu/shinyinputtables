@@ -6,6 +6,6 @@ Authors@R: person("Bulukani", "Mlalazi", email = "bulukani.mlalazi@gmail.com",
 Maintainer:  Bulukani Mlalazi <bulukani.mlalazi@gmail.com>
 Description: What the package does (one paragraph)
 Depends: R (>= 3.4.1)
-Imports: shiny
+Imports: shiny (>= 1.0.5)
 License: MIT
 LazyData: true
