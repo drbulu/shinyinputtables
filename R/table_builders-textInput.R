@@ -1,26 +1,32 @@
-
-createTextInputTable <- function(df, idPrefix = NA, 
-                                 tableClasses = "table-bordered", 
-                                 baseClass = "shinyinputtables", editableHeader = F){
-
-    tableMainClass <- paste0(baseClass, "-textInput")  
-    tableClassSet <- edit_class <- paste(tableMainClass, paste(tableClasses, collapse = " "))
-    
-    table_tag_start <- paste0("<table class='", tableClassSet, "'>")
-    
-    tableHead <- createTextInputHead(df = df, idPrefix = idPrefix,
-                                       isEditable = editableHeader,
-                                       cellClasses = NA,
-                                       baseClass = baseClass)
-    tableBody <- createTextInputBody(df = df, idPrefix = idPrefix,
-                                     cellClasses = NA,
-                                     baseClass = baseClass)
-    
-    paste0(table_tag_start, tableHead, tableBody, "</table>")
+createTextInputTable <- function(
+  df, 
+  idPrefix = NA, 
+  tableClasses = "table-bordered", 
+  baseClass = "shinyinputtables", 
+  editableHeader = F){
+  
+  tableMainClass <- paste0(baseClass, "-textInput")  
+  tableClassSet <- edit_class <- paste(tableMainClass, paste(tableClasses, collapse = " "))
+  
+  table_tag_start <- paste0("<table class='", tableClassSet, "'>")
+  
+  tableHead <- createTextInputHead(df = df, idPrefix = idPrefix,
+    isEditable = editableHeader,
+    cellClasses = NA,
+    baseClass = baseClass)
+  tableBody <- createTextInputBody(df = df, idPrefix = idPrefix,
+    cellClasses = NA,
+    baseClass = baseClass)
+  
+  paste0(table_tag_start, tableHead, tableBody, "</table>")
   
 }
 
-createTextInputHead <- function(df, idPrefix, cellClasses, isEditable = F, baseClass){
+createTextInputHead <- function(
+  df, 
+  idPrefix, 
+  cellClasses, 
+  isEditable = F, baseClass){
   
   defaultCellClass <- paste0(baseClass, "-head")
   
@@ -36,8 +42,8 @@ createTextInputHead <- function(df, idPrefix, cellClasses, isEditable = F, baseC
     
     cellId <- ifelse(hasIdPrefix, paste0(idPrefix, "_", colID), NA)
     defaultCellClass <- ifelse(hasIdPrefix, 
-                               defaultCellClass, 
-                               paste0(defaultCellClass, "_", colID))
+      defaultCellClass, 
+      paste0(defaultCellClass, "_", colID))
     
     cellClasses <- paste0(defaultCellClass, cellClasses)
     
@@ -46,26 +52,28 @@ createTextInputHead <- function(df, idPrefix, cellClasses, isEditable = F, baseC
     
     if(isEditable){
       cellElement <- createInputCell(eValue = names(df)[colID], 
-                                    eId = cellId, 
-                                    eClasses = cellClasses,
-                                    type = "text")
+        eId = cellId, 
+        eClasses = cellClasses,
+        type = "text")
     } else {
       cellElement <- createSpanCell(eValue = names(df)[colID], 
-                     eId = cellId, 
-                     eClasses = cellClasses)
+        eId = cellId, 
+        eClasses = cellClasses)
     }
     
     paste0("<th>", cellElement, "</th>")
-
+    
   })
   
   return(paste0("<thead>", "<tr>", 
-                paste(tableHead, collapse=""), 
-                "</tr></thead>"))
+    paste(tableHead, collapse=""), 
+    "</tr></thead>"))
   
 }
 
-createTextInputBody <- function(df, idPrefix = NA, cellClasses = NA, baseClass){
+createTextInputBody <- function(
+  df, idPrefix = NA, 
+  cellClasses = NA, baseClass){
   
   defaultCellClass <- paste0(baseClass, "-cell")
   
@@ -89,17 +97,17 @@ createTextInputBody <- function(df, idPrefix = NA, cellClasses = NA, baseClass){
       # 2. if ID provided leave unchanged, else paste with cellRef.
       cellId <- ifelse(hasIdPrefix, paste0(idPrefix, "_", cellRef), NA)
       defaultCellClass <- ifelse(hasIdPrefix, 
-                                 defaultCellClass, 
-                                 paste0(defaultCellClass, "_", cellRef))
+        defaultCellClass, 
+        paste0(defaultCellClass, "_", cellRef))
       
       cellClasses <- paste0(defaultCellClass, cellClasses)
       
       paste0("<td>", 
-             createInputCell(eValue = df[rowID, colID], 
-                             eId = cellId, 
-                             eClasses = cellClasses,
-                             type = "text"),
-             "</td>")
+        createInputCell(eValue = df[rowID, colID], 
+          eId = cellId, 
+          eClasses = cellClasses,
+          type = "text"),
+        "</td>")
       
     })
     
