@@ -24,10 +24,10 @@ $.extend(textTableInputBinding, {
   },
 
 
-  initialize: function(el){
+//  initialize: function(el){
     // TODO: Implement table element initialisation
     // once table creation strategy implemented in R code
-  },
+//  },
 
   // gets the shiny div container parent of the input table
   getParentId: function(el){
@@ -55,6 +55,7 @@ $.extend(textTableInputBinding, {
       console.log( "Event trigger on element: " + el.id);
       
       var parentID = textTableInputBinding.getParentId(el);
+      
       Shiny.onInputChange(parentID, el.id);
       callback(true);
     });
