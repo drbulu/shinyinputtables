@@ -12,26 +12,78 @@ var textTableInputBinding = new Shiny.InputBinding();
 // avoids memory leaks?: https://api.jquery.com/data/ (recommended in the prop vs attr discussion)
 // 
 
+
+
+
+
+
+
 // An input binding must implement these methods
 // https://github.com/rstudio/shiny/blob/master/srcjs/input_binding_text.js
 $.extend(textTableInputBinding, {
+
+// probably move to helpers .................................
+
+  // Finding matching class in REGEX:
+  // https://stackoverflow.com/a/5424544
+  containsRegex: function(a, regex){
+    for(var i = 0; i < a.length; i++) {
+      if(a[i].search(regex) > -1){
+        return i;
+      }
+    }
+    return -1;
+  },
+
+// ........................................................
+
 
   // This returns a jQuery object with the DOM element
   // Targets the input cells of class "input-cell" within
   // the parent table container.
   find: function(scope) {
-    return $(scope).find('.input-cell');
+    console.log( "find(): scope found...");
+    return $(scope).find('table[class^="shinyinput"] input');
   },
 
-
-//  initialize: function(el){
+  initialize: function(el){
     // TODO: Implement table element initialisation
     // once table creation strategy implemented in R code
-//  },
+    
+    console.log( "Element initialisation: has class(es): " + el.className);
+    
+    // https://stackoverflow.com/a/9279379
+    var baseClassREGEX = "^shinyinputtables";
+    var eClasses = el.className.split(' ');
+    var matchId = this.containsRegex(eClasses, baseClassREGEX);
+    var targetClass = eClasses[matchId];
+    
+    console.log( 
+      "The target class is: " + targetClass + " and is at position " + matchId + ".\n"
+    );
+ 
+    // add element id if missing!
+    if (!el.hasAttribute("id")){
+      // obtain the ID of el's Shiny div parent and cell ID suffix
+      var parentID = this.getParentId(el);
+      var idSuffix = targetClass.match("_[0-9]+-[0-9]+$").toString();
+      
+      // construct new id for el based on parentID and targetClass
+      var elNewId = parentID + idSuffix;
+      el.id = elNewId;
+      el.className = el.className.replace(idSuffix, "");
+      
+      console.log( "This element has an ID? " + el.hasAttribute("id") + " with parent element ID: " + parentID);
+      console.log( "Element now has class(es): " + el.className + " and id " + el.id + ".");
+      
+    } 
+    
+  },
 
   // gets the shiny div container parent of the input table
+  // https://stackoverflow.com/q/10539419
+  // getting element by tagName as id not always guaranteed
   getParentId: function(el){
-    console.log( "getParentId() on element " + el.id + "...");
     return $(el).parents('div[class^="shiny"]').prop("id");
   },
 
