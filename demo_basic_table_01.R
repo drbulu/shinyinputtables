@@ -6,15 +6,17 @@ ui <- fluidPage(
   
   h3("basic Shiny table input"),
   br(),
-  p("put table here"),
+  p("Input table renders here!"),
+  br(),
   textTableInput(tableId = "test_input_table"),
   br(),
-  p("moreStuff 4.2.4")
+  textOutput("test_text"),
+  br()
   
 )
 
 
-server <- function(input, output) {
+server <- function(input, output, session) {
   
   output_table_id <- "test_input_table"
   
@@ -31,16 +33,20 @@ server <- function(input, output) {
   #   df = test_df, 
   #   tableId = output_table_id)
   
-  observe({
+  observeEvent({
     
-    observeEvent({
-      # input[[test_id]]
+    input[[output_table_id]]
+    
+  }, {
+    
+    observe({
       
-      input[[output_table_id]]
+      event_id <- input[[output_table_id]]
+      event_val <- input[[event_id]]
       
-    }, {
+      output[["test_text"]] <- renderText(paste0("Cell ID: ", event_id, " value: ", event_val ))
       
-      cat("output_table_id = ", input[[test_id]], "\n")
+      cat(paste0("Cell ID: ", event_id, " value: ", event_val ), "\n")
       
     })
     
