@@ -92,7 +92,7 @@ $.extend(textTableInputBinding, {
   },
 
   getValue: function(el) {
-    console.log( "getValue() on element " + el.id + "...");
+    console.log( "getValue() on element " + el.id + " with value " + el.value + ".");
     return el.value;
   },
     
@@ -102,12 +102,13 @@ $.extend(textTableInputBinding, {
   
   subscribe: function(el, callback) {
 
+    console.log( "Subscribing: " + el.tagName  + " with ID: " + el.id);
+
     $(el).on('keyup.textTableInputBinding input.textTableInputBinding', function(event) {
       
       console.log( "Event trigger on element: " + el.id);
       
       var parentID = textTableInputBinding.getParentId(el);
-      
       Shiny.onInputChange(parentID, el.id);
       callback(true);
     });
@@ -150,7 +151,7 @@ $.extend(textTableInputBinding, {
     return {
       // Can be 'debounce' or 'throttle'
       policy: 'debounce',
-      delay: 250
+      delay: 300
     };
   }
 });
