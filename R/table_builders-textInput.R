@@ -14,8 +14,11 @@ createTextInputTable <- function(
     isEditable = editableHeader,
     cellClasses = NA,
     baseClass = baseClass)
+  
+  # added extra classes to test
+  
   tableBody <- createTextInputBody(df = df, idPrefix = idPrefix,
-    cellClasses = NA,
+    cellClasses = c("input-cell editable"),
     baseClass = baseClass)
   
   paste0(table_tag_start, tableHead, tableBody, "</table>")
