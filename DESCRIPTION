@@ -3,9 +3,10 @@ Title: An R package for the creation of editable shiny html tables based on user
 Version: 0.0.0
 Authors@R: person("Bulukani", "Mlalazi", email = "bulukani.mlalazi@gmail.com",
                   role = c("aut", "cre"))
-Maintainer:  Bulukani Mlalazi <bulukani.mlalazi@gmail.com>
+Maintainer: Bulukani Mlalazi <bulukani.mlalazi@gmail.com>
 Description: What the package does (one paragraph)
 Depends: R (>= 3.4.1)
 Imports: shiny (>= 1.0.5)
 License: MIT
 LazyData: true
+RoxygenNote: 6.0.1
