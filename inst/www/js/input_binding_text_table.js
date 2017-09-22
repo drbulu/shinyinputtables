@@ -106,10 +106,13 @@ $.extend(textTableInputBinding, {
 
     $(el).on('keyup.textTableInputBinding input.textTableInputBinding', function(event) {
       
-      console.log( "Event trigger on element: " + el.id);
-      
+      // el.id should be equal to event.target.id
       var parentID = textTableInputBinding.getParentId(el);
       Shiny.onInputChange(parentID, el.id);
+      
+      console.log( "Event trigger on element: " + el.id);
+      console.log( "Event element parent: " + parentID);
+      
       callback(true);
     });
     
