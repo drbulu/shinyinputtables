@@ -111,7 +111,6 @@ $.extend(textTableInputBinding, {
   },
 
   getValue: function(el) {
-    console.log( "getValue() on element " + el.id + " with value " + el.value + ".");
     return el.value;
   },
     
@@ -120,9 +119,7 @@ $.extend(textTableInputBinding, {
   },
   
   subscribe: function(el, callback) {
-
-    console.log( "Subscribing: " + el.tagName  + " with ID: " + el.id);
-
+    
     $(el).on('keyup.textTableInputBinding input.textTableInputBinding', function(event) {
       
       // el.id should be equal to event.target.id

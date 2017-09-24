@@ -59,7 +59,6 @@ tableModule <- function(input, output, session, df){
                                                   "!"))
   })
   
-  
 }
 
 # app UI funcdtion
@@ -70,20 +69,8 @@ ui <- shiny::fluidPage(
 # app server function
 server <- function(input, output, session) {
   
-  # Cannot listen for events within server module function
-  # must do so outside module within main server function.
-  # https://github.com/ropensci/plotly/issues/659
-  # answer: https://github.com/ropensci/plotly/issues/659#issuecomment-238693777
-  # This seems to be the cleanest solution to the problem!
-  #
-  # https://shiny.rstudio.com/reference/shiny/latest/NS.html
-  # much cleaner using shiny's native NS() function. Probably better
-  # if the implementation changes in the future!
-  
+  # module id as used in the UI
   ui_id <- "module_test"
-  moduleNS <- shiny::NS(ui_id)
-  table_id <- moduleNS("input_table")
-  text_id <- moduleNS("text_output")
   
   # initialise table UI module
   shiny::callModule(tableModule, 
