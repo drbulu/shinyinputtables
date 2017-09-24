@@ -34,6 +34,25 @@ $.extend(textTableInputBinding, {
     }
     return -1;
   },
+  
+  createEventJSON: function(el){
+    
+    var cellREGEX = "[0-9H]+-[0-9]+";
+    var parentID = this.getParentId(el);
+    var cell_ref = el.id.match(cellREGEX).toString().split("-");
+    
+    // JS string = single quotes. concat JSON result = double quotes!
+    // thanks @ www.jsonlint.com
+    // thanks @ https://www.w3schools.com/js/js_json_objects.asp
+    return '{ ' + 
+            '"parent.id" : "' + parentID + '", ' +
+              '"cell.id" : "' + el.id + '", ' +
+             '"cell.row" : "' + cell_ref[0] + '", ' +
+             '"cell.col" : "' + cell_ref[1] + '", ' +
+           '"cell.value" : "' + el.value + '", ' +
+             '"cell.tag" : "' + el.tagName + '"' + 
+          ' }';
+  },
 
 // ........................................................
 
@@ -108,11 +127,12 @@ $.extend(textTableInputBinding, {
       
       // el.id should be equal to event.target.id
       var parentID = textTableInputBinding.getParentId(el);
-      Shiny.onInputChange(parentID, el.id);
+      var eventVal = textTableInputBinding.createEventJSON(el);
+      Shiny.onInputChange(parentID, eventVal);
       
       console.log( "Event trigger on element: " + el.id);
       console.log( "Event element parent: " + parentID);
-      
+      console.log( "Event value: " + el.value);
       callback(true);
     });
     

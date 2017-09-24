@@ -41,28 +41,26 @@ tableModule <- function(input, output, session, df){
   })
   
   shiny::observeEvent({
-    # input[[ table_id  ]]
-    
-    input[[session$ns(table_id)]]
-    
+    input[[ table_id  ]]
   }, {
-    shiny::observe({
-      # extract ID and value of the modified cell
-      event_id <- input[[table_id]]
+    
+    event_id <- session$input[[table_id]]
+    event_val <- session$input[[event_id]]
+    
+    cat("observeEvent() A target event: ", paste0("Cell ID: ", event_id, " value: ", event_val ), "\n")
+    
+    
+    shiny::observeEvent({session$input[[event_id]]}, {
+      
+      # event_id <- input[[output_table_id]]
       event_val <- input[[event_id]]
       
-      table_ns_id <- session$ns(table_id)
-      table_cell_ns_id <- input[[ table_ns_id ]]
-      # event_value <- input[[table_cell_ns_id]]
+      cat("observeEvent() B target event: ", paste0("Cell ID: ", event_id, " value: ", event_val ), "\n")
       
-      cat("namespaced table ID (eventID):", session$ns(table_id), "\n" )
-      cat("namespaced cell ID (srcID):", table_cell_ns_id, "\n" )
-      cat("namespaced cell ID class():", class(table_cell_ns_id), "\n\n" )
-      # cat("namespaced cell value (val):", event_value, "\n" )
-
-      # report changes to UI
-      output[[text_id]] <- shiny::renderText(paste0("Cell ID: ", event_id, " value: ", event_val, "."))
+      output[[text_id]] <- shiny::renderText(paste0("observed event - Cell ID: ", event_id, " value: ", event_val ))
+      
     })
+    
   })
   
 }
@@ -107,7 +105,7 @@ server <- function(input, output, session) {
       event_id <- input[[table_id]]
       event_val <- input[[event_id]]
 
-      cat(paste0("server() watcher... Cell ID: ", event_id, " value: ", event_val, ".\n"))
+      cat(paste0("\nserver() watcher... Cell ID: ", event_id, " value: ", event_val, ".\n"))
       
       # report changes to UI
       # output[[text_id]] <- shiny::renderText(paste0("Cell ID: ", event_id, " value: ", event_val, "."))

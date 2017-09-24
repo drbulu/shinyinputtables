@@ -35,6 +35,31 @@ tableModule <- function(input, output, session, df){
     output[[table_id]] <- shinyinputtables::renderTextTableInput(df = df(), tableId = NA)
   })
   
+  # initial demo message
+  output[[text_id]] <- shiny::renderText(paste0("Modify table data to view changes here."))
+  
+  # Note: also works if tableId = table_id
+  test_df <- head(iris)
+  output[[table_id]] <- shinyinputtables::renderTextTableInput(
+    df = test_df, 
+    tableId = NA)
+  
+  # observe changes to input table
+  shiny::observeEvent({
+    input[[table_id]]
+  }, {
+    # process event data JSON
+    event_data <- input[[table_id]]
+    event_value <- jsonlite::fromJSON(event_data)
+    
+    # render result to UI
+    output[[text_id]] <- shiny::renderText(paste0("Event detected: ", 
+                                                  "cell ID = ", event_value$cell.id,
+                                                  ". Cell value = ", event_value$cell.value,
+                                                  "!"))
+  })
+  
+  
 }
 
 # app UI funcdtion
@@ -65,22 +90,6 @@ server <- function(input, output, session) {
                     id = ui_id, 
                     df = shiny::reactive( head(DNase))
   )
-  
-  # initial demo message
-  output[[text_id]] <- shiny::renderText(paste0("Modify table data to view changes here."))
-  
-  shiny::observeEvent({
-    input[[table_id]]
-  }, {
-    shiny::observe({
-      # extract ID and value of the modified cell
-      event_id <- input[[table_id]]
-      event_val <- input[[event_id]]
-
-      # report changes to UI
-      output[[text_id]] <- shiny::renderText(paste0("Cell ID: ", event_id, " value: ", event_val, "."))
-    })
-  })
   
 }
 
