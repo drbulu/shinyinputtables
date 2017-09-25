@@ -27,12 +27,23 @@ $.extend(textTableInputBinding, {
   // Finding matching class in REGEX:
   // https://stackoverflow.com/a/5424544
   containsRegex: function(a, regex){
-    for(var i = 0; i < a.length; i++) {
+    for(var i = 0; i < a.length; i++){
       if(a[i].search(regex) > -1){
         return i;
       }
     }
     return -1;
+  },
+  
+  // easiest to manually escape single quote char
+  // this is the only char not handled by the 
+  // encodeURIComponent() function AFAIK.
+  urlEncodeData: function(jsObject){
+    for(var name in jsObject){
+      var value = jsObject[name].replace("'", "%27");
+      jsObject[name] = encodeURIComponent(value);
+    }
+    return jsObject;
   },
   
   createEventJSON: function(el){
@@ -53,9 +64,9 @@ $.extend(textTableInputBinding, {
                       'cell.col' : cell_ref[1],
                       'cell.value' : el.value,
                       'cell.tag' : el.tagName };
-                      
-    // 2. convert to JSON string via JSON.stringify()
-    return JSON.stringify(resultObj);
+                        
+    // 2. URL encode then convert to JSON string via JSON.stringify()
+    return JSON.stringify(this.urlEncodeData(resultObj));
     
   },
 

@@ -28,7 +28,11 @@ server <- function(input, output, session) {
   }, {
     # process event data JSON
     event_data <- input[[table_id]]
+    
+    # Parse to JSON THEN decode. Else unescaped char (") crashes fromJSON
     event_value <- jsonlite::fromJSON(event_data)
+    event_value <- lapply(X = event_value, FUN = utils::URLdecode)
+    
     
     # render result to UI
     output[[text_id]] <- shiny::renderText(paste0("Event detected: ", 
