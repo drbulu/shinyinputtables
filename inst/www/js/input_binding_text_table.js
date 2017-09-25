@@ -41,17 +41,22 @@ $.extend(textTableInputBinding, {
     var parentID = this.getParentId(el);
     var cell_ref = el.id.match(cellREGEX).toString().split("-");
     
-    // JS string = single quotes. concat JSON result = double quotes!
+    // convert to JSON string before dispatch
     // thanks @ www.jsonlint.com
     // thanks @ https://www.w3schools.com/js/js_json_objects.asp
-    return '{ ' + 
-            '"parent.id" : "' + parentID + '", ' +
-              '"cell.id" : "' + el.id + '", ' +
-             '"cell.row" : "' + cell_ref[0] + '", ' +
-             '"cell.col" : "' + cell_ref[1] + '", ' +
-           '"cell.value" : "' + el.value + '", ' +
-             '"cell.tag" : "' + el.tagName + '"' + 
-          ' }';
+    //
+    // 1. create plain javascript objects. Names have to be string instead of
+    // bare names as "." name sep illegal in JS, though fine in R
+    var resultObj = { 'parent.id' : parentID,
+                      'cell.id' : el.id,
+                      'cell.row' : cell_ref[0],
+                      'cell.col' : cell_ref[1],
+                      'cell.value' : el.value,
+                      'cell.tag' : el.tagName };
+                      
+    // 2. convert to JSON string via JSON.stringify()
+    return JSON.stringify(resultObj);
+    
   },
 
 // ........................................................
