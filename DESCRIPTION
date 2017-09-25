@@ -1,9 +1,11 @@
 Package: shinyinputtables
 Title: An R package for the creation of editable shiny html tables based on user-supplied data frame objects. 
-Version: 0.1.0
-Authors@R: person("Bulukani", "Mlalazi", email = "bulukani.mlalazi@gmail.com",
-                  role = c("aut", "cre"))
-Maintainer: Bulukani Mlalazi <bulukani.mlalazi@gmail.com>
+Version: 0.1.0.9000
+Authors@R: c(person("Bulukani", "Mlalazi", email = "bulukani.mlalazi@gmail.com",
+                    role = c("aut", "cre")),
+            person("Anthony", "Ebert", email = "anthonyebert+CRAN@gmail.com", 
+                    role = c("ctb"))
+           )
 Description: What the package does (one paragraph)
 Depends: R (>= 3.3.3)
 Imports: shiny (>= 1.0.5)
