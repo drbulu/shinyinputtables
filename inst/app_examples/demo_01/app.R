@@ -33,7 +33,6 @@ server <- function(input, output, session) {
     event_value <- jsonlite::fromJSON(event_data)
     event_value <- lapply(X = event_value, FUN = utils::URLdecode)
     
-    
     # render result to UI
     output[[text_id]] <- shiny::renderText(paste0("Event detected: ", 
                                                   "cell ID = ", event_value$cell.id,
