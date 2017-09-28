@@ -21,135 +21,50 @@ var textTableInputBinding = new Shiny.InputBinding();
 // An input binding must implement these methods
 // https://github.com/rstudio/shiny/blob/master/srcjs/input_binding_text.js
 $.extend(textTableInputBinding, {
-
-// probably move to helpers .................................
-
-  // Finding matching class in REGEX:
-  // https://stackoverflow.com/a/5424544
-  containsRegex: function(a, regex){
-    for(var i = 0; i < a.length; i++){
-      if(a[i].search(regex) > -1){
-        return i;
-      }
-    }
-    return -1;
-  },
   
-  // easiest to manually escape single quote char
-  // this is the only char not handled by the 
-  // encodeURIComponent() function AFAIK.
-  urlEncodeData: function(jsObject){
-    for(var name in jsObject){
-      var value = jsObject[name].replace("'", "%27");
-      jsObject[name] = encodeURIComponent(value);
-    }
-    return jsObject;
-  },
-  
-  createEventJSON: function(el){
-    
-    var cellREGEX = "[0-9H]+-[0-9]+";
-    var parentID = this.getParentId(el);
-    var cell_ref = el.id.match(cellREGEX).toString().split("-");
-    
-    // convert to JSON string before dispatch
-    // thanks @ www.jsonlint.com
-    // thanks @ https://www.w3schools.com/js/js_json_objects.asp
-    //
-    // 1. create plain javascript objects. Names have to be string instead of
-    // bare names as "." name sep illegal in JS, though fine in R
-    var resultObj = { 'parent.id' : parentID,
-                      'cell.id' : el.id,
-                      'cell.row' : cell_ref[0],
-                      'cell.col' : cell_ref[1],
-                      'cell.value' : el.value,
-                      'cell.tag' : el.tagName };
-                        
-    // 2. URL encode then convert to JSON string via JSON.stringify()
-    return JSON.stringify(this.urlEncodeData(resultObj));
-    
-  },
-
-// ........................................................
-
-
-  // This returns a jQuery object with the DOM element
-  // Targets the input cells of class "input-cell" within
-  // the parent table container.
   find: function(scope) {
-    console.log( "find(): scope found...");
-    return $(scope).find('table[class^="shinyinput"] input');
+    return $(scope).find('table[class^="shinyinputtables"]');
   },
-
-  initialize: function(el){
-    // TODO: Implement table element initialisation
-    // once table creation strategy implemented in R code
-    
-    console.log( "Element initialisation: has class(es): " + el.className);
-    
-    // https://stackoverflow.com/a/9279379
-    var baseClassREGEX = "^shinyinputtables";
-    var eClasses = el.className.split(' ');
-    var matchId = this.containsRegex(eClasses, baseClassREGEX);
-    var targetClass = eClasses[matchId];
-    
-    console.log( 
-      "The target class is: " + targetClass + " and is at position " + matchId + ".\n"
-    );
- 
-    // add element id if missing!
-    if (!el.hasAttribute("id")){
-      // obtain the ID of el's Shiny div parent and cell ID suffix
-      var parentID = this.getParentId(el);
-      var idSuffix = targetClass.match("_[0-9]+-[0-9]+$").toString();
-      
-      // construct new id for el based on parentID and targetClass
-      var elNewId = parentID + idSuffix;
-      el.id = elNewId;
-      el.className = el.className.replace(idSuffix, "");
-      
-      console.log( "This element has an ID? " + el.hasAttribute("id") + " with parent element ID: " + parentID);
-      console.log( "Element now has class(es): " + el.className + " and id " + el.id + ".");
-      
-    } 
-    
+  
+  initialize: function(el) {
+    // unimplemented
   },
-
-  // gets the shiny div container parent of the input table
-  // https://stackoverflow.com/q/10539419
-  // getting element by tagName as id not always guaranteed
-  getParentId: function(el){
-    return $(el).parents('div[class^="shiny"]').prop("id");
-  },
-
+  
   getId: function(el) {
-    return el.id;
+    return InputTableUtils.getParentId(el);
   },
 
   getValue: function(el) {
-    return el.value;
+    return el.getAttribute("data-table_event");
   },
     
   setValue: function(el, value) {
-    el.value = value;
+    el.setAttribute("data-table_event", value);
   },
   
   subscribe: function(el, callback) {
     
-    $(el).on('keyup.textTableInputBinding input.textTableInputBinding', function(event) {
+    var _self = this;
+    
+    $(el).on('keyup.textTableInputBinding input.textTableInputBinding', 
+             ".input_table_cell", function(event) {
+    
+      console.log("Event detected!");
       
-      // el.id should be equal to event.target.id
-      var parentID = textTableInputBinding.getParentId(el);
-      var eventVal = textTableInputBinding.createEventJSON(el);
-      Shiny.onInputChange(parentID, eventVal);
+      var evTarget = event.target;
       
-      console.log( "Event trigger on element: " + el.id);
-      console.log( "Event element parent: " + parentID);
-      console.log( "Event value: " + el.value);
-      callback(true);
+      var eventVal = InputTableUtils.createEventJSON(evTarget);
+      
+      _self.setValue(el, eventVal);
+      
+      //https://stackoverflow.com/a/222824
+      console.log( "New Event value: " + evTarget.value);
+      console.log( "Event object: " + eventVal);
+      
+      callback(false);
     });
     
-    $(el).on('change.textTableInputBinding', function(event) {
+    $(el).on('change.textTableInputBinding', ".input_table_cell", function(event){
       callback(false);
     });
     
@@ -176,9 +91,9 @@ $.extend(textTableInputBinding, {
   
   getState: function(el) {
     return {
-      label: $(el).parent().find('label[for="' + $escape(el.id) + '"]').text(),
-      value: el.value,
-      placeholder: el.placeholder
+      id: this.getId(el),
+      data: this.getValue(el),
+      tag: el.tagName
     };
   },
 

@@ -25,40 +25,38 @@ basicInputCheck <- function(val, removeInfOrNA = T){
 # I'm not sure that I want to set readonly status quite yet
 # this might be something along the lines of a param called
 # isLockable (or a better name)
-createInputCell <- function(eValue, eId = NA, eClasses = NA, type = "text"){
+createInputCell <- function(eValue, eRef = NAL, eClasses = NA, type = "text"){
   
   # input validation for params
   eValue <- basicInputCheck(val = eValue, removeInfOrNA = F)
   type <- basicInputCheck(val = type, removeInfOrNA = T)
-  eId <- basicInputCheck(val = eId, removeInfOrNA = T)
+  eRef <- basicInputCheck(val = eRef, removeInfOrNA = T)
   eClasses <- basicInputCheck(val = eClasses, removeInfOrNA = T)
   
   # param prep for element creation
-  eId <- ifelse(!nchar(eId), eId, paste0("id ='", eId, "' "))
   eClasses <- ifelse(!nchar(eClasses), eClasses, paste0("class ='", eClasses, "' "))
   type <- ifelse(!nchar(type), "text", type)
   
   return(paste0(
     "<input value = '", eValue, "' ",
-    eId, eClasses,
+    eRef, " ", eClasses,
     "type = '", type, "' >"
   ))
 }
 
 # Will possibly implement editable spans via contenteditable 
 # attribute later if it makes sense
-createSpanCell <- function(eValue, eId = NA, eClasses = NA){
+createSpanCell <- function(eValue, eRef = NA, eClasses = NA){
   
   # input validation for params
   eValue <- basicInputCheck(val = eValue, removeInfOrNA = F)
-  eId <- basicInputCheck(val = eId, removeInfOrNA = T)
+  eRef <- basicInputCheck(val = eRef, removeInfOrNA = T)
   eClasses <- basicInputCheck(val = eClasses, removeInfOrNA = T)
   
   # param prep for element creation
-  eId <- ifelse(!nchar(eId), eId, paste0("id ='", eId, "' "))
   eClasses <- ifelse(!nchar(eClasses), eClasses, paste0("class ='", eClasses, "' "))
   
   return(paste0(
-    "<span ", eId, eClasses, ">", eValue, "</span>"
+    "<span ", eRef, " ", eClasses, ">", eValue, "</span>"
   ))
 }

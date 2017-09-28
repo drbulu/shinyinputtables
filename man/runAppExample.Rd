@@ -4,16 +4,25 @@
 \alias{runAppExample}
 \title{Run demo shiny apps to test out shinyinputtables functionality}
 \usage{
-runAppExample(demoName)
+runAppExample(demoName, mode = "showcase")
 }
 \arguments{
-\item{demoName}{Single length character vector denoting the name of the desired demo app to run.}
+\item{demoName}{Single length character vector specifying the name of the
+desired demo app to run.}
+
+\item{mode}{Single length character vector specifying the Shiny app display
+mode. Value is used to set the \code{display.mode} arg in \code{Shiny::runApp}.
+Legal values are either "showcase" (default) or "normal".}
 }
 \description{
 Run a selected shiny app demo that showcases particulars aspects
 of the functionality provided by the \code{shinyinputtables} package extension for Shiny.
 }
 \details{
-Currently the only supported demos are currently called "demo_01" and "demo_02".
-Will describe each available demo in a separate section here
+Currently the only supported demos are currently called "demo_01" 
+and "demo_02". Will describe each available demo in a separate section here
+}
+\note{
+These examples will run externally in the browser, but the may not run
+ well in the RStudio
 }
