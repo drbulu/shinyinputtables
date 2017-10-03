@@ -2,7 +2,7 @@ const DATA_MAP = new Map([
   ["class" , "cell.class"],
   ["value" , "cell.value"],
   ["tagName" , "cell.tag"],
-  ["data-cell_ref", "row-col"]
+  ["data-cell_label", "row-col"]
 ]);
 
 class InputTableUtils {

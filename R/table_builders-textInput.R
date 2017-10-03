@@ -22,7 +22,7 @@ createTextInputTable <- function(
 createTextInputHead <- function(df, isEditable = F){
   
   baseCellClass <- "input_table_cell"
-  cellRefPrefix <- "data-cell_ref = "
+  cellRefPrefix <- "data-cell_label= "
   
   tableHead <- sapply(X = 1:ncol(df), FUN = function(colID){
     cell_data_ref <- paste0(cellRefPrefix, "'H-", colID, "'")
@@ -49,7 +49,7 @@ createTextInputHead <- function(df, isEditable = F){
 createTextInputBody <- function(df){
   
   baseCellClass <- "input_table_cell"
-  cellRefPrefix <- "data-cell_ref = "
+  cellRefPrefix <- "data-cell_label = "
   
   tableRows <- lapply(X = 1:nrow(df), FUN = function(rowID){
     rowCells <- sapply(X = 1:ncol(df), FUN = function(colID){
