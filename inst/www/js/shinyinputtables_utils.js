@@ -18,9 +18,9 @@ class InputTableUtils {
       
         if(key == "value"){
           res[value] = el.value; 
-        } else if (key == "data-cell_ref"){
+        } else if (key == "data-cell_label"){
           var refNames = value.split('-');
-          var refVals = key.split('-');
+          var refVals = el.getAttribute(key).split('-');
           res["cell."+ refNames[0]] = refVals[0];
           res["cell."+ refNames[1]] = refVals[1];
         } else {
