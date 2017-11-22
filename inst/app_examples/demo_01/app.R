@@ -1,9 +1,15 @@
-ui <- shiny::fluidPage(shiny::tags$h3("Demo App: Basic Shiny table input"),
-                       shiny::tags$br(),
-                       shiny::tags$div(style = "margin-left:50px;",
-                                       shiny::textOutput("text_output")),
-                       shiny::tags$br(),
-                       shinyinputtables::textTableInput(tableId = "input_table")
+ui <- shiny::fluidPage(
+  # shiny::tags$h3("Demo App: Basic Shiny table input"),
+  #                      shiny::tags$br(),
+  #                      shiny::tags$div(style = "margin-left:50px;",
+  #                                      shiny::textOutput("text_output")),
+  #                      shiny::tags$br(),
+  
+  sliderInput("integer", "Integer:",
+              min = 0, max = 1000,
+              value = 500),                     
+  shinyinputtables::textTableInput(tableId = "input_table", label = "heading")
+                       
 )
 
 server <- function(input, output, session) {

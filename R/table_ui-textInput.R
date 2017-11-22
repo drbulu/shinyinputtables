@@ -18,7 +18,7 @@
 #' \code{\link{renderTextTableInput}}
 #' 
 #' @export
-textTableInput <- function(tableId){
+textTableInput <- function(tableId,label){
 
   addResourcePath(
     prefix = 'www',
@@ -31,6 +31,7 @@ textTableInput <- function(tableId){
   
   shiny::tagList(
     shiny::singleton(
+      shiny::tags$label(label),
       shiny::tags$head(
         shiny::tags$script(src=utils_js_path),
         shiny::tags$script(src=table_js_path),
